@@ -1,10 +1,10 @@
 # csuf_assessment
 
-<<<<<<< HEAD
+
 This project was built with Ruby, so Ruby will be required to run it
 
-To check if Ruby is installed on your PC, 
-=======
+To check if Ruby is installed on your PC,
+
 ## System Check
 
 This project was built with Ruby, therefore you will need Ruby to run it.
@@ -44,4 +44,3 @@ You will be prompted with the option to name the HTML file, after that the progr
 will generate the HTML file.
 
 Open the file and see the results
->>>>>>> e1580ce456f453d529477f1026797c06f451eba6

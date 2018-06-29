@@ -1,16 +1,22 @@
 require 'erb'
 require 'httparty'
+require 'pry'
 
 module Commands
   @@list = []
   @@array = []
   @@dne = []
 
-## Takes the local txt file of isbn numbers and parses it into an array
+## Takes the local txt file of isbn numbers and parses it into an array by first
+## checking if the list item is an ISBN and also if it exists
   def self.create_array
     file = File.open("lib/isbns.txt", "r")
     file.each do |f|
-      if !f.scan(/\d/).empty?
+      a = f.gsub(/,/, "").chomp
+      url = "https://openlibrary.org/api/books?bibkeys=ISBN:#{a}&jscmd=data&format=json"
+      response = HTTParty.get(url)
+
+      if !f.scan(/\d/).empty? && !response.empty?
         @@array << f.gsub(/,/, "").chomp
       else
         @@dne << f
@@ -27,15 +33,25 @@ module Commands
       f.gsub(/\n/, "")
       url = "https://openlibrary.org/api/books?bibkeys=ISBN:#{f}&jscmd=data&format=json"
       response = HTTParty.get(url)
-      response != "{}" ? parsed = JSON.parse(response.body) : @@dne << f
+      parsed = JSON.parse(response.body)
+      excerpt = (parsed['ISBN:'+f]['excerpts'])
 
-      @@list << Book.new(
-        parsed['ISBN:'+f]['title'],
-        f,
-        parsed['ISBN:'+f]['authors'][0]['name'],
-        parsed['ISBN:'+f]['cover']['large'],
-        parsed['ISBN:'+f]['excerpts'][0]['text']
-      )
+      if excerpt.nil?
+        @@list << Book.new(
+          parsed['ISBN:'+f]['title'],
+          f,
+          parsed['ISBN:'+f]['authors'][0]['name'],
+          parsed['ISBN:'+f]['cover']['large']
+        )
+      else
+        @@list << Book.new(
+          parsed['ISBN:'+f]['title'],
+          f,
+          parsed['ISBN:'+f]['authors'][0]['name'],
+          parsed['ISBN:'+f]['cover']['large'],
+          parsed['ISBN:'+f]['excerpts'][0]['text']
+        )
+      end
     end
   end
 
