@@ -60,6 +60,12 @@
         </div>
       </section>
     <% end %>
+    <section>
+      <h1>These do not exist</h1>
+    <% @@dne.each do |f| %>
+      <p><%= f %></p>
+    <% end %>
+    </section>
   </div>
 </body>
 

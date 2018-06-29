@@ -19,6 +19,8 @@ end
 
 # initiates the creation of array from txt file containing ISBN numbers
 Commands.create_array
+# puts Commands.isbn_array
+# puts Commands.dne
 
 # pulls the array of ISBN numbers and passes it in as an argument to be called
 # through the API
