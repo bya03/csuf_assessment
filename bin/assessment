@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require_relative '../config/environment'
+
+fileName = ""
+
+puts "Welcome to my ISBN HTML template program!\n"
+
+# Option to name the generated html file
+puts "Would you like to name the HTML file? (y/n)"
+answer = gets.strip
+if answer.downcase == "y"
+  puts "What would you like to name the file?"
+  name = gets.strip
+  fileName = name + ".html"
+else
+  fileName = "index.html"
+end
+
+# initiates the creation of array from txt file containing ISBN numbers
+Commands.create_array
+
+# pulls the array of ISBN numbers and passes it in as an argument to be called
+# through the API
+list = Commands.isbn_array
+Commands.convert(list)
+
+# Generates HTML file
+Commands.generate_html(fileName)
